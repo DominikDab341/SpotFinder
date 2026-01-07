@@ -2,7 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.conf import settings
-from .serializers import SpotSearchSerializer
+from .serializers import SpotSearchSerializer, ReservationSerializer
+from .models import Reservation
 import requests
 
 class SpotsView(APIView):
@@ -71,3 +72,17 @@ class SpotsView(APIView):
             except requests.exceptions.RequestException:
                 return Response({"error": "Błąd połączenia z Places API"}, status=503)
         return Response(serializer.errors, status=400)
+    
+
+class ReservationView(APIView):
+    def post(self, request):
+        serializer = ReservationSerializer(data=request.data)
+        if serializer.is_valid():
+            reservation = serializer.save(user=request.user)
+            return Response(ReservationSerializer(reservation).data, status=201)
+        return Response(serializer.errors, status=400)
+    
+    def get(self, request):
+        reservations = Reservation.objects.filter(user=request.user)
+        serializer = ReservationSerializer(reservations, many=True)
+        return Response(serializer.data)
