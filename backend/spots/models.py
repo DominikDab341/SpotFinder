@@ -29,3 +29,15 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f"Reservation for {self.guests} at {self.spot.name} on {self.reservation_time}"
+
+
+class FavoriteSpot(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorite_spots')
+    spot = models.ForeignKey(Spot, on_delete=models.CASCADE, related_name='favorited_by')
+    added_at = models.DateField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'spot')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.spot.name}"
