@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.conf import settings
 from .serializers import SpotSearchSerializer, ReservationSerializer, FavoriteSpotSerializer
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from .models import Reservation, FavoriteSpot
 import requests
 
@@ -75,19 +75,14 @@ class SpotsView(APIView):
         return Response(serializer.errors, status=400)
     
 
-class ReservationView(APIView):
-    def post(self, request):
-        serializer = ReservationSerializer(data=request.data)
-        if serializer.is_valid():
-            reservation = serializer.save(user=request.user)
-            return Response(ReservationSerializer(reservation).data, status=201)
-        return Response(serializer.errors, status=400)
-    
-    def get(self, request):
-        reservations = Reservation.objects.filter(user=request.user)
-        serializer = ReservationSerializer(reservations, many=True)
-        return Response(serializer.data)
-    
+class ReservationView(generics.ListCreateAPIView):
+    serializer_class = ReservationSerializer
+
+    def get_queryset(self):
+        return Reservation.objects.filter(user=self.request.user).order_by('-reservation_time')
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)    
 
 class FavoriteSpotViewSet(viewsets.ModelViewSet):
     serializer_class = FavoriteSpotSerializer
