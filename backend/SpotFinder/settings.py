@@ -142,3 +142,7 @@ REST_FRAMEWORK = {
 
 GOOGLE_MAPS_API = os.getenv('GOOGLE_MAPS_API')
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+
+#TODO: Add custom email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@spotfinder.com'
