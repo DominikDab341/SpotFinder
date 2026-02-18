@@ -10,7 +10,7 @@ def send_reservation_mail(sender, instance, created, **kwargs):
         subject = f"Potwierdzenie rezerwacji w {instance.spot.name}"
         message = (
             f"Dziękujemy za rezerwację w {instance.spot.name}.\n"
-            f"Twoja rezerwacja na {instance.reservation_date} została wysłana do potwierdzenia.\n"
+            f"Twoja rezerwacja na {instance.reservation_time} została wysłana do potwierdzenia.\n"
             f"Liczba gości {instance.guests}\n"
             f"Pozdrawiamy,\nZespół SpotFinder"
         )
