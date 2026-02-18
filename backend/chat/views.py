@@ -6,6 +6,7 @@ from django.conf import settings
 import requests
 from .serializers import SpotAIChatSerializer 
 from google import genai 
+from langdetect import detect
 
 import httpx
 
@@ -29,8 +30,8 @@ class SpotAIChatView(APIView):
                     "X-Goog-Api-Key": api_key_maps,
                     "X-Goog-FieldMask": "editorialSummary,reviews" 
                 }
-                #TODO: Language detection 
-                params = {"languageCode": "pl"}
+                language = detect(user_question)
+                params = {"languageCode": language}
 
                 try:
                     google_response = await client.get(places_url, headers=headers, params=params)
