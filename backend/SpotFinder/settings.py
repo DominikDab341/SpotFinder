@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'user',
     'spots',
     'adrf',
+    'django_tasks',
 ]
 
 MIDDLEWARE = [
@@ -138,6 +139,13 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+}
+
+#TODO: Use redis
+TASKS = {
+    "default":{
+        "BACKEND": "django_tasks.backends.immediate.ImmediateBackend"
+    }
 }
 
 GOOGLE_MAPS_API = os.getenv('GOOGLE_MAPS_API')
