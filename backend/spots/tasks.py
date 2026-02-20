@@ -4,7 +4,7 @@ from .models import Reservation
 
 
 
-@task(priority=100)
+@task()
 def send_reservation_mail_task(reservation_id: int):
     try:
         instance = Reservation.objects.get(id=reservation_id)

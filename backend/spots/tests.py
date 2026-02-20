@@ -6,7 +6,14 @@ from .models import Spot, Reservation
 
 User = get_user_model()
 
-@override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+@override_settings(
+    EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend',
+    TASKS={
+        "default": {
+            "BACKEND": "django_tasks.backends.immediate.ImmediateBackend"
+        }
+    }
+)
 class ReservationEmailTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(

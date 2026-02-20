@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,6 +49,8 @@ INSTALLED_APPS = [
     'spots',
     'adrf',
     'django_tasks',
+    'django_tasks_rq',
+    'django_rq',
 ]
 
 MIDDLEWARE = [
@@ -78,8 +81,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'SpotFinder.wsgi.application'
-
+ASGI_APPLICATION = 'SpotFinder.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
@@ -141,10 +143,17 @@ REST_FRAMEWORK = {
     ),
 }
 
-#TODO: Use redis
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+    }
+}
+
 TASKS = {
     "default":{
-        "BACKEND": "django_tasks.backends.immediate.ImmediateBackend"
+        "BACKEND": "django_tasks_rq.RQBackend"
     }
 }
 
