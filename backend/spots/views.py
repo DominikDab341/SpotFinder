@@ -25,7 +25,7 @@ class SpotsView(APIView):
         if serializer.is_valid():
             address = serializer.validated_data['address']
             radius = serializer.validated_data['radius']
-            spot_type = serializer.validated_data['type']
+            spot_type = serializer.validated_data.get('spot_type', None)
             
             api_key = settings.GOOGLE_MAPS_API
             async with httpx.AsyncClient() as client:
@@ -56,7 +56,6 @@ class SpotsView(APIView):
                 }
 
                 payload = {
-                    "includedTypes": [spot_type],
                     "maxResultCount": 10,
                     "locationRestriction": {
                         "circle": {
@@ -68,6 +67,9 @@ class SpotsView(APIView):
                         }
                     }
                 }
+
+                if spot_type:
+                    payload["includedTypes"] = [spot_type]
 
                 try:
                     places_response = await client.post(places_url, json=payload, headers=headers)
