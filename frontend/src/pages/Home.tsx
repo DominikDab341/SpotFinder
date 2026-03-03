@@ -9,7 +9,6 @@ function Home() {
     const [spots, setSpots] = useState<Spot[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
-    //TODO: Add loading state for fetching spots
     useEffect(() => {
         if (geoLoading) return;
         if (geoError) return;
@@ -32,6 +31,13 @@ function Home() {
         fetchSpots();
     }, [address, geoLoading, geoError]);
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (geoError) {
+        return <div>Error: {geoError}</div>;
+    }
 
     return (
         <div>
