@@ -9,7 +9,8 @@ export interface DisplayName {
 
 export interface Spot {
     id: string;
-    displayName: DisplayName;
+    name?: string;
+    displayName?: DisplayName;
     formattedAddress: string;
     rating?: number;
     userRatingCount?: number;
@@ -21,7 +22,7 @@ export interface SpotCardProps {
     spot: Spot;
 }
 
-function SpotCard({spot}: SpotCardProps) {
+function SpotCard({ spot }: SpotCardProps) {
     const [isFavorite, setIsFavorite] = useState(false);
 
     //TODO: Fix removing from favorites
@@ -41,7 +42,7 @@ function SpotCard({spot}: SpotCardProps) {
         try {
             const response = await api.post('favorites/', {
                 google_place_id: spot.id,
-                name: spot.displayName.text,
+                name: spot.displayName?.text || spot.name,
                 address: spot.formattedAddress,
                 spot_type: spot.spot_type || "unknown"
                 //TODO: Consider whether this is a good approach
@@ -53,7 +54,7 @@ function SpotCard({spot}: SpotCardProps) {
     };
     return (
         <div>
-            <h1>{spot.displayName.text}</h1>
+            <h1>{spot.displayName?.text || spot.name}</h1>
             <p>Address: {spot.formattedAddress}</p>
             <p>Rating: {spot.rating}</p>
             <p>User Rating Count: {spot.userRatingCount}</p>

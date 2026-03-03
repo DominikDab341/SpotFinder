@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Layout from './components/Layout';
+import Favorites from './pages/Favorites';
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
         {/* <Route path="/register" element={<Register />} /> */}
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/favorites" element={<Favorites />} />
         </Route>
       </Routes>
     </main>
