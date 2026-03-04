@@ -16,6 +16,8 @@ export interface Spot {
     userRatingCount?: number;
     priceLevel?: string;
     spot_type?: string;
+    is_favorite: boolean;
+    favorite_id: string;
 }
 
 export interface SpotCardProps {
@@ -23,15 +25,17 @@ export interface SpotCardProps {
 }
 
 function SpotCard({ spot }: SpotCardProps) {
-    const [isFavorite, setIsFavorite] = useState(false);
+    const [isFavorite, setIsFavorite] = useState<boolean>(spot.is_favorite);
 
-    //TODO: Fix removing from favorites
+
     const handleRemoveFromFavorites = async () => {
         if (!isFavorite) return;
 
         try {
-            const response = await api.delete(`favorites/${spot.id}/`);
+            const response = await api.delete(`favorites/${spot.favorite_id}/`);
             setIsFavorite(false);
+            spot.is_favorite = false;
+            spot.favorite_id = "";
         } catch (error) {
             console.error('Error removing from favorites:', error);
         }
@@ -45,9 +49,10 @@ function SpotCard({ spot }: SpotCardProps) {
                 name: spot.displayName?.text || spot.name,
                 address: spot.formattedAddress,
                 spot_type: spot.spot_type || "unknown"
-                //TODO: Consider whether this is a good approach
             });
             setIsFavorite(true);
+            spot.is_favorite = true;
+            spot.favorite_id = response.data.id;
         } catch (error) {
             console.error('Error adding to favorites:', error);
         }

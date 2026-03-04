@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from adrf.views import APIView
+from asgiref.sync import sync_to_async
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTStatelessUserAuthentication
 from django.conf import settings
@@ -74,6 +75,22 @@ class SpotsView(APIView):
                 try:
                     places_response = await client.post(places_url, json=payload, headers=headers)
                     places_data = places_response.json()
+
+                    @sync_to_async
+                    def get_user_favorite_spots(user_id):
+                        return list(FavoriteSpot.objects.filter(user_id=user_id).select_related('spot'))
+
+
+                    user_favorites = await get_user_favorite_spots(request.user.id)
+                    favorite_dict = {fav.spot.google_place_id: fav.id for fav in user_favorites}
+                    for place in places_data.get('places', []):
+                        google_id = place['id']
+                        if google_id in favorite_dict:
+                            place['is_favorite'] = True
+                            place['favorite_id'] = favorite_dict[google_id]
+                        else:
+                            place['is_favorite'] = False
+                            place['favorite_id'] = None
                     return Response(places_data)
                     
                 except httpx.RequestError:
