@@ -30,7 +30,7 @@ class SpotGetOrCreate(serializers.Serializer):
     priceLevel = serializers.IntegerField(write_only=True, required=False, allow_null=True)
 
     def get_or_create_spot(self,validated_data):
-        google_id = validated_data.pop('google_place_id')
+        google_id = validated_data.pop('googlePlaceId')
         display_name = validated_data.pop('displayName')
         formatted_address = validated_data.pop('formattedAddress')
         rating = validated_data.pop('rating', None)
@@ -77,7 +77,9 @@ class FavoriteSpotSerializer(SpotGetOrCreate, serializers.ModelSerializer):
     class Meta:
         model = FavoriteSpot
         fields = [
-            'id', 'spotDetails'
+            'id', 'spotDetails',
+            'googlePlaceId', 'displayName', 'formattedAddress',
+            'rating', 'userRatingCount', 'priceLevel'
         ]
 
     def create(self, validated_data):  
