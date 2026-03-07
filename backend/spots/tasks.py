@@ -11,9 +11,9 @@ def send_reservation_mail_task(reservation_id: int):
     except Reservation.DoesNotExist:
         return
         
-    subject = f"Potwierdzenie rezerwacji w {instance.spot.name}"
+    subject = f"Potwierdzenie rezerwacji w {instance.spot.display_name}"
     message = (
-        f"Dziękujemy za rezerwację w {instance.spot.name}.\n"
+        f"Dziękujemy za rezerwację w {instance.spot.display_name}.\n"
         f"Twoja rezerwacja na {instance.reservation_time} została wysłana do potwierdzenia.\n"
         f"Liczba gości {instance.guests}\n"
         f"Pozdrawiamy,\nZespół SpotFinder"

@@ -91,6 +91,9 @@ class SpotsView(APIView):
                         else:
                             place['is_favorite'] = False
                             place['favorite_id'] = None
+                        place['displayName'] = place['displayName']['text']
+                        place.pop('location')
+
                     return Response(places_data)
                     
                 except httpx.RequestError:

@@ -3,15 +3,14 @@ from django.contrib.auth.models import User
 
 class Spot(models.Model):
     google_place_id = models.CharField(max_length=255, unique=True)
-    name = models.CharField(max_length=255)
-    address = models.CharField(max_length=500)
-    spot_type = models.CharField(max_length=100)
+    display_name = models.CharField(max_length=255)
+    formatted_address = models.CharField(max_length=500)
     rating = models.FloatField(null=True, blank=True)
     user_rating_count = models.IntegerField(null=True, blank=True)
     price_level = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.display_name
     
 class Reservation(models.Model):
     STATUS_CHOICES = [
@@ -28,7 +27,7 @@ class Reservation(models.Model):
     guests = models.IntegerField(default=2)
 
     def __str__(self):
-        return f"Reservation for {self.guests} at {self.spot.name} on {self.reservation_time}"
+        return f"Reservation for {self.guests} at {self.spot.display_name} on {self.reservation_time}"
 
 
 class FavoriteSpot(models.Model):
