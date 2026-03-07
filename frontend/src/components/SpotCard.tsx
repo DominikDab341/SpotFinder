@@ -1,23 +1,18 @@
 import { useState } from 'react';
 import api from '../api/api';
 
-export interface DisplayName {
-    text: string;
-    languageCode?: string;
-}
+
 
 
 export interface Spot {
-    id: string;
-    name?: string;
-    displayName?: DisplayName;
+    googlePlaceId: string;
+    displayName: string;
     formattedAddress: string;
     rating?: number;
     userRatingCount?: number;
     priceLevel?: string;
-    spot_type?: string;
-    is_favorite: boolean;
-    favorite_id: string;
+    isFavorite?: boolean;
+    favoriteId?: number | null;
 }
 
 export interface SpotCardProps {
@@ -25,17 +20,17 @@ export interface SpotCardProps {
 }
 
 function SpotCard({ spot }: SpotCardProps) {
-    const [isFavorite, setIsFavorite] = useState<boolean>(spot.is_favorite);
+    const [isFavorite, setIsFavorite] = useState<boolean>(spot.isFavorite ?? true);
 
 
     const handleRemoveFromFavorites = async () => {
         if (!isFavorite) return;
 
         try {
-            const response = await api.delete(`favorites/${spot.favorite_id}/`);
+            await api.delete(`favorites/${spot.favoriteId}/`);
             setIsFavorite(false);
-            spot.is_favorite = false;
-            spot.favorite_id = "";
+            spot.isFavorite = false;
+            spot.favoriteId = null;
         } catch (error) {
             console.error('Error removing from favorites:', error);
         }
@@ -45,21 +40,20 @@ function SpotCard({ spot }: SpotCardProps) {
 
         try {
             const response = await api.post('favorites/', {
-                google_place_id: spot.id,
-                name: spot.displayName?.text || spot.name,
-                address: spot.formattedAddress,
-                spot_type: spot.spot_type || "unknown"
+                googlePlaceId: spot.googlePlaceId,
+                displayName: spot.displayName,
+                formattedAddress: spot.formattedAddress,
             });
             setIsFavorite(true);
-            spot.is_favorite = true;
-            spot.favorite_id = response.data.id;
+            spot.isFavorite = true;
+            spot.favoriteId = response.data.id;
         } catch (error) {
             console.error('Error adding to favorites:', error);
         }
     };
     return (
         <div>
-            <h1>{spot.displayName?.text || spot.name}</h1>
+            <h1>{spot.displayName}</h1>
             <p>Address: {spot.formattedAddress}</p>
             <p>Rating: {spot.rating}</p>
             <p>User Rating Count: {spot.userRatingCount}</p>

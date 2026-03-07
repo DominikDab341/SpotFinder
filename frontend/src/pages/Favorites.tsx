@@ -10,7 +10,12 @@ function Favorites() {
         const fetchFavorites = async () => {
             try {
                 const response = await api.get('favorites/');
-                setFavorites(response.data);
+                const spots: Spot[] = response.data.map((fav: any) => ({
+                    ...fav.spotDetails,
+                    isFavorite: true,
+                    favoriteId: fav.id,
+                }));
+                setFavorites(spots);
             } catch (error) {
                 console.error('Error fetching favorites:', error);
             }
@@ -23,7 +28,7 @@ function Favorites() {
         <div>
             <h1>Ulubione</h1>
             {favorites.map((spot) => (
-                <SpotCard key={spot.id} spot={spot} />
+                <SpotCard key={spot.googlePlaceId} spot={spot} />
             ))}
         </div>
     );

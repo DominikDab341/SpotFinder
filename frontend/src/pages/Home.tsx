@@ -43,8 +43,8 @@ function Home() {
         <div>
             <h1>Home</h1>
             {spots.map((spot) => (
-                <SpotCard key={spot.id} spot={spot} />
-            ))}
+                <SpotCard key={spot.googlePlaceId} spot={spot} />
+            ))} 
         </div>
     );
 }

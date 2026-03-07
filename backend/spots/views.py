@@ -100,8 +100,8 @@ class SpotsView(APIView):
                             'rating': place.get('rating'),
                             'userRatingCount': place.get('userRatingCount'),
                             'priceLevel': place.get('priceLevel'),
-                            'is_favorite': is_fav,
-                            'favorite_id': fav_id
+                            'isFavorite': is_fav,
+                            'favoriteId': fav_id
                         }
                         
                         places_list[i] = new_place
