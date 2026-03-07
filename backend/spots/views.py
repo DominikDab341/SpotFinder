@@ -83,17 +83,30 @@ class SpotsView(APIView):
 
                     user_favorites = await get_user_favorite_spots(request.user.id)
                     favorite_dict = {fav.spot.google_place_id: fav.id for fav in user_favorites}
-                    for place in places_data.get('places', []):
-                        google_id = place['id']
-                        if google_id in favorite_dict:
-                            place['is_favorite'] = True
-                            place['favorite_id'] = favorite_dict[google_id]
-                        else:
-                            place['is_favorite'] = False
-                            place['favorite_id'] = None
-                        place['displayName'] = place['displayName']['text']
-                        place.pop('location')
+                    
+                    places_list = places_data.get('places', [])
+                    for i, place in enumerate(places_list):
+                        google_id = place.get('id')
+                        
+                        is_fav = google_id in favorite_dict
+                        fav_id = favorite_dict.get(google_id) if is_fav else None
+                        
+                        display_name_text = place.get('displayName', {}).get('text')
+                        
+                        new_place = {
+                            'googlePlaceId': google_id,
+                            'displayName': display_name_text,
+                            'formattedAddress': place.get('formattedAddress'),
+                            'rating': place.get('rating'),
+                            'userRatingCount': place.get('userRatingCount'),
+                            'priceLevel': place.get('priceLevel'),
+                            'is_favorite': is_fav,
+                            'favorite_id': fav_id
+                        }
+                        
+                        places_list[i] = new_place
 
+                    places_data['places'] = places_list
                     return Response(places_data)
                     
                 except httpx.RequestError:

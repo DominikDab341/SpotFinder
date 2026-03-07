@@ -8,21 +8,21 @@ class SpotSearchSerializer(serializers.Serializer):
     spot_type = serializers.CharField(required=False, allow_blank=True)
 
 class SpotDisplayMetaSerializer(serializers.ModelSerializer):
-    google_place_id = serializers.CharField(source='google_place_id')
+    googlePlaceId = serializers.CharField(source='google_place_id')
     displayName = serializers.CharField(source='display_name')
     formattedAddress = serializers.CharField(source='formatted_address')
-    rating = serializers.FloatField(source='rating')
+    rating = serializers.FloatField()
     userRatingCount = serializers.IntegerField(source='user_rating_count')
     priceLevel = serializers.IntegerField(source='price_level')
 
     class Meta:
         model = Spot
         fields = [
-            'id', 'google_place_id', 'displayName', 'formattedAddress', 'rating', 'userRatingCount', 'priceLevel'
+            'id', 'googlePlaceId', 'displayName', 'formattedAddress', 'rating', 'userRatingCount', 'priceLevel'
         ]
 
 class SpotGetOrCreate(serializers.Serializer):
-    google_place_id = serializers.CharField(write_only=True)
+    googlePlaceId = serializers.CharField(write_only=True)
     displayName = serializers.CharField(write_only=True)
     formattedAddress = serializers.CharField(write_only=True)
     rating = serializers.FloatField(write_only=True, required=False, allow_null=True)
@@ -56,7 +56,7 @@ class ReservationSerializer(SpotGetOrCreate,serializers.ModelSerializer):
     class Meta:
         model = Reservation
         fields = ['id', 'reservationTime', 'guests', 'status', 
-            'google_place_id', 'displayName', 'formattedAddress', 'spotDetails'
+            'googlePlaceId', 'displayName', 'formattedAddress', 'spotDetails'
         ]
         read_only_fields = ['id', 'status', 'user']
     def create(self,validated_data):
@@ -72,12 +72,12 @@ class ReservationSerializer(SpotGetOrCreate,serializers.ModelSerializer):
     
 
 class FavoriteSpotSerializer(SpotGetOrCreate, serializers.ModelSerializer):
-    spot_details = SpotDisplayMetaSerializer(source='spot', read_only=True)
+    spotDetails = SpotDisplayMetaSerializer(source='spot', read_only=True)
 
     class Meta:
         model = FavoriteSpot
         fields = [
-            'id', 'spot_details'
+            'id', 'spotDetails'
         ]
 
     def create(self, validated_data):  
