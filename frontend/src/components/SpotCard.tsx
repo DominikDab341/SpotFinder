@@ -17,9 +17,10 @@ export interface Spot {
 
 export interface SpotCardProps {
     spot: Spot;
+    onRemove?: (googlePlaceId: string) => void;
 }
 
-function SpotCard({ spot }: SpotCardProps) {
+function SpotCard({ spot, onRemove }: SpotCardProps) {
     const [isFavorite, setIsFavorite] = useState<boolean>(spot.isFavorite ?? true);
 
 
@@ -31,6 +32,9 @@ function SpotCard({ spot }: SpotCardProps) {
             setIsFavorite(false);
             spot.isFavorite = false;
             spot.favoriteId = null;
+            if (onRemove) {
+                onRemove(spot.googlePlaceId);
+            }
         } catch (error) {
             console.error('Error removing from favorites:', error);
         }
@@ -43,6 +47,9 @@ function SpotCard({ spot }: SpotCardProps) {
                 googlePlaceId: spot.googlePlaceId,
                 displayName: spot.displayName,
                 formattedAddress: spot.formattedAddress,
+                rating: spot.rating ?? null,
+                userRatingCount: spot.userRatingCount ?? null,
+                priceLevel: spot.priceLevel ?? null,
             });
             setIsFavorite(true);
             spot.isFavorite = true;

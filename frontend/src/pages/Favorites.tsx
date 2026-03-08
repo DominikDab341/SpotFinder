@@ -24,11 +24,19 @@ function Favorites() {
         fetchFavorites();
     }, []);
 
+    const handleRemove = (googlePlaceId: string) => {
+        setFavorites((prevFavorites) => prevFavorites.filter(spot => spot.googlePlaceId !== googlePlaceId));
+    };
+
     return (
         <div>
-            <h1>Ulubione</h1>
+            {favorites.length === 0 ? (
+                <h1>Brak ulubionych miejsc</h1>
+            ) : (
+                <h1>Ulubione</h1>
+            )}
             {favorites.map((spot) => (
-                <SpotCard key={spot.googlePlaceId} spot={spot} />
+                <SpotCard key={spot.googlePlaceId} spot={spot} onRemove={handleRemove} />
             ))}
         </div>
     );
