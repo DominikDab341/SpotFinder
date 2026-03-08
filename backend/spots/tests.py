@@ -2,7 +2,10 @@ from django.test import TestCase, override_settings
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.utils import timezone
-from .models import Spot, Reservation
+from .models import Spot, Reservation, FavoriteSpot
+from rest_framework.test import APITestCase
+from rest_framework import status
+from django.urls import reverse
 
 User = get_user_model()
 
@@ -23,9 +26,8 @@ class ReservationEmailTest(TestCase):
         )
         self.spot = Spot.objects.create(
             google_place_id='testplugin',
-            name='Test Spot',
-            address='Test Address',
-            spot_type='restaurant'
+            display_name='Test Spot',
+            formatted_address='Test Address',
         )
 
     def test_email_sent_on_reservation(self):
@@ -42,6 +44,81 @@ class ReservationEmailTest(TestCase):
 
         # Verify email content
         email = mail.outbox[0]
-        self.assertEqual(email.subject, f"Potwierdzenie rezerwacji w {self.spot.name}")
+        self.assertEqual(email.subject, f"Potwierdzenie rezerwacji w {self.spot.display_name}")
         self.assertIn('test@example.com', email.to)
         self.assertIn('Dziękujemy za rezerwację', email.body)
+
+
+class SpotModelTest(TestCase):
+    def test_create_spot(self):
+        spot = Spot.objects.create(
+            google_place_id='test_google_id_123',
+            display_name='Test Spot Create',
+            formatted_address='123 Test St',
+            rating=4.5,
+            user_rating_count=100,
+            price_level=2
+        )
+        self.assertEqual(Spot.objects.count(), 1)
+        self.assertEqual(spot.display_name, 'Test Spot Create')
+        self.assertEqual(spot.rating, 4.5)
+
+    def test_delete_spot(self):
+        spot = Spot.objects.create(
+            google_place_id='test_google_id_456',
+            display_name='Test Spot Delete',
+            formatted_address='456 Delete St',
+        )
+        self.assertEqual(Spot.objects.count(), 1)
+        spot.delete()
+        self.assertEqual(Spot.objects.count(), 0)
+
+
+class FavoriteSpotAPITest(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='testuserfav', 
+            email='testfav@example.com', 
+            password='password123'
+        )
+        self.client.force_authenticate(user=self.user)
+        self.url = reverse('favorite-spots-list')  # Defaults created by router for basename='favorite-spots'
+
+    def test_create_favorite_spot(self):
+        payload = {
+            "googlePlaceId": "ChIJtest123",
+            "displayName": "API Test Spot",
+            "formattedAddress": "API Address 123",
+            "rating": 4.8,
+            "userRatingCount": 50,
+            "priceLevel": 1
+        }
+        response = self.client.post(self.url, payload, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(FavoriteSpot.objects.count(), 1)
+        self.assertEqual(Spot.objects.count(), 1)
+        
+        fav_spot = FavoriteSpot.objects.first()
+        self.assertEqual(fav_spot.user, self.user)
+        self.assertEqual(fav_spot.spot.google_place_id, "ChIJtest123")
+        self.assertEqual(fav_spot.spot.display_name, "API Test Spot")
+
+    def test_remove_favorite_spot(self):
+        # Create a spot and favorite it first to test deletion
+        spot = Spot.objects.create(
+            google_place_id='ChIJtest456',
+            display_name='Delete API Spot',
+            formatted_address='Delete Address 456'
+        )
+        fav_spot = FavoriteSpot.objects.create(user=self.user, spot=spot)
+        
+        self.assertEqual(FavoriteSpot.objects.count(), 1)
+        
+        delete_url = reverse('favorite-spots-detail', args=[fav_spot.id])
+        response = self.client.delete(delete_url)
+        
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(FavoriteSpot.objects.count(), 0)
+        # Spot itself should still exist in db, just the favorite relation is removed
+        self.assertEqual(Spot.objects.count(), 1)
