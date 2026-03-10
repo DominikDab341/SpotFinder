@@ -3,6 +3,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Layout from './components/Layout';
 import Favorites from './pages/Favorites';
+import MyReservations from './pages/MyReservations';
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/favorites" element={<Favorites />} />
+          <Route path="/reservations" element={<MyReservations />} />
         </Route>
       </Routes>
     </main>

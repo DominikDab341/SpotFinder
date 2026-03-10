@@ -15,6 +15,10 @@ function Navbar() {
     navigate('/favorites');
   };
 
+  const handleReservations = () => {
+    navigate('/reservations');
+  };
+
   return (
     <>
       <nav className="navbar">
@@ -28,6 +32,9 @@ function Navbar() {
         <div className="navbar-right">
           <button className="navbar-button" onClick={handleFavorites}>
             Ulubione
+          </button>
+          <button className="navbar-button" onClick={handleReservations}>
+            Moje rezerwacje
           </button>
           <button className="navbar-button" onClick={handleLogout}>
             Wyloguj
