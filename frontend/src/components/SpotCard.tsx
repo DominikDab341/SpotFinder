@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import api from '../api/api';
-
+import ReservationModal from './Modal/ReservationModal';
 
 
 
@@ -22,7 +22,7 @@ export interface SpotCardProps {
 
 function SpotCard({ spot, onRemove }: SpotCardProps) {
     const [isFavorite, setIsFavorite] = useState<boolean>(spot.isFavorite ?? true);
-
+    const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
 
     const handleRemoveFromFavorites = async () => {
         if (!isFavorite) return;
@@ -58,6 +58,7 @@ function SpotCard({ spot, onRemove }: SpotCardProps) {
             console.error('Error adding to favorites:', error);
         }
     };
+
     return (
         <div>
             <h1>{spot.displayName}</h1>
@@ -74,6 +75,15 @@ function SpotCard({ spot, onRemove }: SpotCardProps) {
                     Add to favorites ❤️
                 </button>
             )}
+            <button onClick={() => setIsReservationModalOpen(true)}>
+                Reserve
+            </button>
+
+            <ReservationModal
+                isOpen={isReservationModalOpen}
+                onClose={() => setIsReservationModalOpen(false)}
+                place={spot}
+            />
 
         </div>
     );
