@@ -48,6 +48,15 @@ class ReservationEmailTest(TestCase):
         self.assertIn('test@example.com', email.to)
         self.assertIn('Dziękujemy za rezerwację', email.body)
 
+    def test_delete_reservation(self):
+        reservation = Reservation.objects.create(
+            user=self.user,
+            spot=self.spot,
+            reservation_time=timezone.now(),
+            guests=2
+        )
+        reservation.delete()
+        self.assertEqual(Reservation.objects.count(), 0)
 
 class SpotModelTest(TestCase):
     def test_create_spot(self):
