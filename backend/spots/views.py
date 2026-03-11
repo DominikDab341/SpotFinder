@@ -114,7 +114,7 @@ class SpotsView(APIView):
         return Response(serializer.errors, status=400)
         
 
-class ReservationView(generics.ListCreateAPIView):
+class ReservationViewSet(viewsets.ModelViewSet):
     serializer_class = ReservationSerializer
 
     def get_queryset(self):
