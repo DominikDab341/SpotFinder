@@ -3,12 +3,14 @@ from rest_framework.response import Response
 from rest_framework import permissions, status
 from rest_framework_simplejwt.authentication import JWTStatelessUserAuthentication
 from django.conf import settings
-import requests
 from .serializers import SpotAIChatSerializer 
 from google import genai 
 from langdetect import detect
 
 import httpx
+
+gemini_client = genai.Client(api_key=settings.GEMINI_API_KEY)
+
 
 class SpotAIChatView(APIView):
     authentication_classes = [JWTStatelessUserAuthentication]
@@ -53,7 +55,6 @@ class SpotAIChatView(APIView):
                     return Response({"answer": "Brak danych o opiniach."}, status=200)
 
                 try:
-                    gemini_client = genai.Client(api_key=settings.GEMINI_API_KEY)
                     #TODO: Do better prompt 
                     prompt = f"Odpisz na pytanie bazując na danych:\n{context_text}\nPytanie: {user_question}"
                     
@@ -63,7 +64,9 @@ class SpotAIChatView(APIView):
                     )
                     return Response({"answer": response.text})
                     
-                except Exception:
+                except Exception as e:
+                    import traceback
+                    traceback.print_exc()
                     return Response({"error": "Błąd AI"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

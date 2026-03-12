@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import api from '../api/api';
 import ReservationModal from './Modal/ReservationModal';
-
+import AIChatModal from './Modal/AIChatModal';
 
 
 export interface Spot {
@@ -23,6 +23,7 @@ export interface SpotCardProps {
 function SpotCard({ spot, onRemove }: SpotCardProps) {
     const [isFavorite, setIsFavorite] = useState<boolean>(spot.isFavorite ?? true);
     const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
+    const [isAIChatModalOpen, setIsAIChatModalOpen] = useState(false);
 
     const handleRemoveFromFavorites = async () => {
         if (!isFavorite) return;
@@ -78,11 +79,21 @@ function SpotCard({ spot, onRemove }: SpotCardProps) {
             <button onClick={() => setIsReservationModalOpen(true)}>
                 Reserve
             </button>
+            
+            <button onClick={() => setIsAIChatModalOpen(true)}>
+                Ask AI
+            </button>
 
             <ReservationModal
                 isOpen={isReservationModalOpen}
                 onClose={() => setIsReservationModalOpen(false)}
                 place={spot}
+            />
+
+            <AIChatModal
+                isOpen={isAIChatModalOpen}
+                onClose={() => setIsAIChatModalOpen(false)}
+                googlePlaceId={spot.googlePlaceId}
             />
 
         </div>
