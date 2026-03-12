@@ -2,7 +2,7 @@ import useGeolocation from "../hooks/useGeolocation";
 import api from "../api/api";
 import { useState, useEffect } from 'react';
 import SpotCard, { Spot } from "../components/SpotCard";
-
+import SearchSpot from "../components/SearchSpot";
 
 function Home() {
     const { address, error: geoError, loading: geoLoading } = useGeolocation();
@@ -41,6 +41,7 @@ function Home() {
 
     return (
         <div>
+            <SearchSpot onSpotsFetch={setSpots}/>
             <h1>Home</h1>
             {spots.map((spot) => (
                 <SpotCard key={spot.googlePlaceId} spot={spot} />
