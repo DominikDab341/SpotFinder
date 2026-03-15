@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTStatelessUserAuthentication
 from django.conf import settings
 from .serializers import SpotSearchSerializer, ReservationSerializer, FavoriteSpotSerializer
+from .place_types import SPOT_CATEGORIES
 from rest_framework import viewsets, generics
 from .models import Reservation, FavoriteSpot
 import requests
@@ -15,7 +16,7 @@ class SpotsView(APIView):
     {
         "address": "1600 Amphitheatre Parkway, Mountain View, CA",
         "radius": 1500, (meters)
-        "type": "restaurant" 
+        "spot_type": "food_and_drink" (category key)
     }
     """
     authentication_classes = [JWTStatelessUserAuthentication]
@@ -70,7 +71,9 @@ class SpotsView(APIView):
                 }
 
                 if spot_type:
-                    payload["includedTypes"] = [spot_type]
+                    category = SPOT_CATEGORIES.get(spot_type)
+                    if category:
+                        payload["includedTypes"] = category["types"]
 
                 try:
                     places_response = await client.post(places_url, json=payload, headers=headers)
@@ -112,7 +115,17 @@ class SpotsView(APIView):
                 except httpx.RequestError:
                     return Response({"error": "Błąd połączenia z Places API"}, status=503)
         return Response(serializer.errors, status=400)
-        
+
+
+class SpotTypesView(APIView):
+
+    def get(self, request):
+        categories = [
+            {"key": key, "label": cat["label"]}
+            for key, cat in SPOT_CATEGORIES.items()
+        ]
+        return Response(categories)
+
 
 class ReservationViewSet(viewsets.ModelViewSet):
     serializer_class = ReservationSerializer

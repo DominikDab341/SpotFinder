@@ -1,6 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Spot } from './SpotCard';
 import api from '../api/api';
+
+interface SpotCategory {
+    key: string;
+    label: string;
+}
 
 interface SearchSpotProps {
     onSpotsFetch: (spots: Spot[]) => void;
@@ -8,13 +13,26 @@ interface SearchSpotProps {
 
 function SearchSpot({ onSpotsFetch }: SearchSpotProps) {
     const [address, setAddress] = useState<string>('');
-    const [type, setType] = useState<string>('all'); 
-    const [radius, setRadius] = useState<number>(1500); 
+    const [type, setType] = useState<string>('all');
+    const [radius, setRadius] = useState<number>(1500);
     const [loading, setLoading] = useState<boolean>(false);
+    const [categories, setCategories] = useState<SpotCategory[]>([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await api.get('/spot-types/');
+                setCategories(response.data);
+            } catch (error) {
+                console.error('Error fetching spot categories:', error);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     const handleSearch = async () => {
-        if (!address) return; 
-        
+        if (!address) return;
+
         setLoading(true);
         try {
             const payload: Record<string, any> = {
@@ -22,7 +40,7 @@ function SearchSpot({ onSpotsFetch }: SearchSpotProps) {
                 radius: radius
             };
             if (type !== 'all') {
-                payload.type = type;
+                payload.spot_type = type;
             }
 
             const response = await api.post('/spots/', payload);
@@ -33,17 +51,17 @@ function SearchSpot({ onSpotsFetch }: SearchSpotProps) {
             setLoading(false);
         }
     };
-    
+
     return (
         <div>
             <h2>Wyszukaj</h2>
-            
+
             <div>
                 <label>Ulica / Miejsce:</label>
-                <input 
-                    type="text" 
-                    value={address} 
-                    onChange={(e) => setAddress(e.target.value)} 
+                <input
+                    type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
                     placeholder="Np. Marszałkowska, Warszawa"
                 />
             </div>
@@ -51,21 +69,21 @@ function SearchSpot({ onSpotsFetch }: SearchSpotProps) {
             <div>
                 <label>Typ:</label>
                 <select value={type} onChange={(e) => setType(e.target.value)}>
-                    <option value="restaurant">Restauracja</option>
-                    <option value="cafe">Kawiarnia</option>
-                    <option value="park">Park</option>
-                    <option value="gym">Siłownia</option>
-                    <option value="museum">Muzeum</option>
                     <option value="all">Wszystkie</option>
+                    {categories.map((cat) => (
+                        <option key={cat.key} value={cat.key}>
+                            {cat.label}
+                        </option>
+                    ))}
                 </select>
             </div>
 
             <div>
                 <label>Odległość (w metrach):</label>
-                <input 
-                    type="number" 
-                    value={radius} 
-                    onChange={(e) => setRadius(Number(e.target.value))} 
+                <input
+                    type="number"
+                    value={radius}
+                    onChange={(e) => setRadius(Number(e.target.value))}
                     step="100"
                     min="100"
                     max="50000"
