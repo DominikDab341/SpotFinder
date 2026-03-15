@@ -31,13 +31,13 @@ function Navbar() {
 
         <div className="navbar-right">
           <button className="navbar-button" onClick={handleFavorites}>
-            Ulubione
+            Favorites
           </button>
           <button className="navbar-button" onClick={handleReservations}>
-            Moje rezerwacje
+            My Reservations
           </button>
           <button className="navbar-button" onClick={handleLogout}>
-            Wyloguj
+            Logout
           </button>
         </div>
       </nav>

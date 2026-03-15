@@ -3,7 +3,7 @@
 
 SPOT_CATEGORIES = {
     "food_and_drink": {
-        "label": "Restauracje i jedzenie",
+        "label": "Food & Drink",
         "types": [
             "restaurant", "cafe", "bar", "bakery",
             "meal_delivery", "meal_takeaway", "food_court",
@@ -11,7 +11,7 @@ SPOT_CATEGORIES = {
         ],
     },
     "entertainment": {
-        "label": "Rozrywka",
+        "label": "Entertainment",
         "types": [
             "amusement_park", "movie_theater", "night_club",
             "bowling_alley", "casino", "concert_hall",
@@ -21,7 +21,7 @@ SPOT_CATEGORIES = {
         ],
     },
     "parks_and_nature": {
-        "label": "Parki i natura",
+        "label": "Parks & Nature",
         "types": [
             "park", "national_park", "state_park", "city_park",
             "dog_park", "garden", "botanical_garden",
@@ -31,7 +31,7 @@ SPOT_CATEGORIES = {
         ],
     },
     "culture": {
-        "label": "Kultura i edukacja",
+        "label": "Culture & Education",
         "types": [
             "museum", "art_gallery", "library",
             "performing_arts_theater", "cultural_center",
@@ -40,7 +40,7 @@ SPOT_CATEGORIES = {
         ],
     },
     "sport": {
-        "label": "Sport i fitness",
+        "label": "Sports & Fitness",
         "types": [
             "gym", "fitness_center", "sports_complex",
             "swimming_pool", "stadium", "tennis_court",
@@ -49,7 +49,7 @@ SPOT_CATEGORIES = {
         ],
     },
     "shopping": {
-        "label": "Zakupy",
+        "label": "Shopping",
         "types": [
             "shopping_mall", "supermarket", "clothing_store",
             "electronics_store", "book_store", "convenience_store",
@@ -59,7 +59,7 @@ SPOT_CATEGORIES = {
         ],
     },
     "health_and_wellness": {
-        "label": "Zdrowie i wellness",
+        "label": "Health & Wellness",
         "types": [
             "hospital", "pharmacy", "dentist", "doctor",
             "spa", "massage", "wellness_center",
@@ -67,7 +67,7 @@ SPOT_CATEGORIES = {
         ],
     },
     "lodging": {
-        "label": "Noclegi",
+        "label": "Lodging",
         "types": [
             "hotel", "hostel", "motel", "lodging",
             "bed_and_breakfast", "resort_hotel", "guest_house",
@@ -75,7 +75,7 @@ SPOT_CATEGORIES = {
         ],
     },
     "services": {
-        "label": "Usługi",
+        "label": "Services",
         "types": [
             "laundry", "barber_shop", "beauty_salon",
             "real_estate_agency", "insurance_agency",
@@ -84,7 +84,7 @@ SPOT_CATEGORIES = {
         ],
     },
     "transportation": {
-        "label": "Transport",
+        "label": "Transportation",
         "types": [
             "airport", "train_station", "bus_station",
             "subway_station", "taxi_stand", "gas_station",
@@ -93,13 +93,13 @@ SPOT_CATEGORIES = {
         ],
     },
     "finance": {
-        "label": "Finanse",
+        "label": "Finance",
         "types": [
             "bank", "atm", "accounting",
         ],
     },
     "government": {
-        "label": "Urzędy",
+        "label": "Government & Public",
         "types": [
             "city_hall", "courthouse", "embassy",
             "post_office", "police", "fire_station",

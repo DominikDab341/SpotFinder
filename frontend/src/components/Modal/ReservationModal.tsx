@@ -17,7 +17,7 @@ function ReservationModal({ isOpen, onClose, place }: Props) {
 
     const handleReservation = async () => {
         if (!date || !time) {
-            alert("Proszę podać datę i godzinę.");
+            alert("Please provide the date and time.");
             return;
         }
 
@@ -43,7 +43,7 @@ function ReservationModal({ isOpen, onClose, place }: Props) {
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
-            <h1>Rejestracja - {place.displayName}</h1>
+            <h1>Reservation - {place.displayName}</h1>
             <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
             <input type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
             <input type="number" min="1" value={guests} onChange={(e) => setGuests(Number(e.target.value))} />

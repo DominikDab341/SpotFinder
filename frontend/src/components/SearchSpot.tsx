@@ -54,22 +54,22 @@ function SearchSpot({ onSpotsFetch }: SearchSpotProps) {
 
     return (
         <div>
-            <h2>Wyszukaj</h2>
+            <h2>Search</h2>
 
             <div>
-                <label>Ulica / Miejsce:</label>
+                <label>Address / Place:</label>
                 <input
                     type="text"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    placeholder="Np. Marszałkowska, Warszawa"
+                    placeholder="e.g. Times Square, New York"
                 />
             </div>
 
             <div>
-                <label>Typ:</label>
+                <label>Type:</label>
                 <select value={type} onChange={(e) => setType(e.target.value)}>
-                    <option value="all">Wszystkie</option>
+                    <option value="all">All</option>
                     {categories.map((cat) => (
                         <option key={cat.key} value={cat.key}>
                             {cat.label}
@@ -79,7 +79,7 @@ function SearchSpot({ onSpotsFetch }: SearchSpotProps) {
             </div>
 
             <div>
-                <label>Odległość (w metrach):</label>
+                <label>Distance (meters):</label>
                 <input
                     type="number"
                     value={radius}
@@ -91,7 +91,7 @@ function SearchSpot({ onSpotsFetch }: SearchSpotProps) {
             </div>
 
             <button onClick={handleSearch} disabled={loading || !address}>
-                {loading ? 'Szukanie...' : 'Szukaj'}
+                {loading ? 'Searching...' : 'Search'}
             </button>
         </div>
     );
