@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Layout from './components/Layout';
 import Favorites from './pages/Favorites';
 import MyReservations from './pages/MyReservations';
+import Register from './pages/Register';
 
 function App() {
 
@@ -12,7 +13,7 @@ function App() {
     <main>
       <Routes>
         <Route path="/login" element={<Login />} />
-        {/* <Route path="/register" element={<Register />} /> */}
+        <Route path="/register" element={<Register />} />
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/favorites" element={<Favorites />} />
