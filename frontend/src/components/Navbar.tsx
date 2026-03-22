@@ -40,7 +40,7 @@ function Navbar() {
           <button className="navbar-button" onClick={handleReservations}>
             My Reservations
           </button>
-          <button className="navbar-button" onClick={handleLogout}>
+          <button className="navbar-button logout" onClick={handleLogout}>
             Logout
           </button>
         </div>
