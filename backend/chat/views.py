@@ -41,22 +41,22 @@ class SpotAIChatView(APIView):
                         return Response({"error": "Google Maps API error"}, status=status.HTTP_400_BAD_REQUEST)
                     place_data = google_response.json()
                 except httpx.RequestError:
-                    return Response({"error": "Błąd połączenia z Google Maps"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+                    return Response({"error": "Google Maps connection problem"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
                 reviews_list = place_data.get('reviews', [])
                 editorial = place_data.get('editorialSummary', {}).get('text', '')
                 
-                context_text = f"Opis: {editorial}\n\nOpinie:\n"
+                context_text = f"Description: {editorial}\n\nReviews:\n"
                 for review in reviews_list:
                     text = review.get('text', {}).get('text', '')
                     context_text += f"- {text}\n"
 
                 if not reviews_list and not editorial:
-                    return Response({"answer": "Brak danych o opiniach."}, status=200)
+                    return Response({"answer": "There is no data about opinions."}, status=200)
 
                 try:
                     #TODO: Do better prompt 
-                    prompt = f"Odpisz na pytanie bazując na danych:\n{context_text}\nPytanie: {user_question}"
+                    prompt = f"Answer the question based on the data:\n{context_text}\nQuestion: {user_question}"
                     
                     response = await gemini_client.aio.models.generate_content(
                         model='gemini-2.5-flash', 
@@ -67,6 +67,6 @@ class SpotAIChatView(APIView):
                 except Exception as e:
                     import traceback
                     traceback.print_exc()
-                    return Response({"error": "Błąd AI"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+                    return Response({"error": "AI Error"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

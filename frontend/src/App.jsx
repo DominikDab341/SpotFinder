@@ -5,6 +5,7 @@ import Layout from './components/Layout';
 import Favorites from './pages/Favorites';
 import MyReservations from './pages/MyReservations';
 import Register from './pages/Register';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
 
@@ -14,10 +15,13 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/reservations" element={<MyReservations />} />
+        
+        <Route element = {<ProtectedRoute />}>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/reservations" element={<MyReservations />} />
+          </Route>
         </Route>
       </Routes>
     </main>

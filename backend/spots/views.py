@@ -48,7 +48,7 @@ class SpotsView(APIView):
                     location = geocode_data['results'][0]['geometry']['location']
                     lat, lng = location['lat'], location['lng']
                 except httpx.RequestError:
-                    return Response({"error": "Błąd połączenia z Geocoding API"}, status=503)
+                    return Response({"error": "Geocoding API connection error."}, status=503)
                 
 
                 places_url = "https://places.googleapis.com/v1/places:searchNearby"
@@ -119,7 +119,7 @@ class SpotsView(APIView):
                     return Response(places_data)
                     
                 except httpx.RequestError:
-                    return Response({"error": "Błąd połączenia z Places API"}, status=503)
+                    return Response({"error": "Places API connection error."}, status=503)
         return Response(serializer.errors, status=400)
 
 
