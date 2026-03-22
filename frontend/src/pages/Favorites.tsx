@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../api/api";
 import SpotCard, { Spot } from "../components/SpotCard";
+import '../css/home.css';
 
 function Favorites() {
 
@@ -29,15 +30,17 @@ function Favorites() {
     };
 
     return (
-        <div>
+        <div className="home-container">
             {favorites.length === 0 ? (
-                <h1>Brak ulubionych miejsc</h1>
+                <h1 className="home-header">Brak ulubionych miejsc</h1>
             ) : (
-                <h1>Ulubione</h1>
+                <h1 className="home-header">Ulubione</h1>
             )}
-            {favorites.map((spot) => (
-                <SpotCard key={spot.googlePlaceId} spot={spot} onRemove={handleRemove} />
-            ))}
+            <div className="spot-grid">
+                {favorites.map((spot) => (
+                    <SpotCard key={spot.googlePlaceId} spot={spot} onRemove={handleRemove} />
+                ))}
+            </div>
         </div>
     );
 }
