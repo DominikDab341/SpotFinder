@@ -34,7 +34,8 @@ function ReservationModal({ isOpen, onClose, place }: Props) {
                 formattedAddress: place.formattedAddress,
                 rating: place.rating || null,
                 userRatingCount: place.userRatingCount || null,
-                priceLevel: place.priceLevel || null
+                priceLevel: place.priceLevel || null,
+                spotCategory: place.spotCategory
             });
             onClose();
         } catch (error) {
