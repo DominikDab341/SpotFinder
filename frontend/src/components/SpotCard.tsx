@@ -2,6 +2,7 @@ import { useState } from 'react';
 import api from '../api/api';
 import ReservationModal from './Modal/ReservationModal';
 import AIChatModal from './Modal/AIChatModal';
+import '../css/spotCard.css';
 
 
 export interface Spot {
@@ -61,28 +62,31 @@ function SpotCard({ spot, onRemove }: SpotCardProps) {
     };
 
     return (
-        <div>
-            <h1>{spot.displayName}</h1>
-            <p>Address: {spot.formattedAddress}</p>
-            <p>Rating: {spot.rating}</p>
-            <p>User Rating Count: {spot.userRatingCount}</p>
-            <p>Price Level: {spot.priceLevel ?? "No data available"}</p>
-            {isFavorite ? (
-                <button onClick={handleRemoveFromFavorites}>
-                    Remove from favorites 💔
-                </button>
-            ) : (
-                <button onClick={handleAddToFavorites}>
-                    Add to favorites ❤️
-                </button>
-            )}
-            <button onClick={() => setIsReservationModalOpen(true)}>
-                Reserve
-            </button>
+        <div className="spot-card">
+            <h2 className="spot-title">{spot.displayName}</h2>
+            <p className="spot-detail"><strong>Address:</strong> {spot.formattedAddress}</p>
+            <p className="spot-detail"><strong>Rating:</strong> {spot.rating}</p>
+            <p className="spot-detail"><strong>Reviews:</strong> {spot.userRatingCount}</p>
+            <p className="spot-detail"><strong>Price:</strong> {spot.priceLevel ?? "No data available"}</p>
             
-            <button onClick={() => setIsAIChatModalOpen(true)}>
-                Ask AI
-            </button>
+            <div className="spot-actions">
+                {isFavorite ? (
+                    <button className="spot-btn spot-btn-favorite" onClick={handleRemoveFromFavorites}>
+                        Remove from favorites 💔
+                    </button>
+                ) : (
+                    <button className="spot-btn spot-btn-favorite" onClick={handleAddToFavorites}>
+                        Add to favorites ❤️
+                    </button>
+                )}
+                <button className="spot-btn spot-btn-primary" onClick={() => setIsReservationModalOpen(true)}>
+                    Reserve
+                </button>
+                
+                <button className="spot-btn spot-btn-secondary" onClick={() => setIsAIChatModalOpen(true)}>
+                    Ask AI
+                </button>
+            </div>
 
             <ReservationModal
                 isOpen={isReservationModalOpen}

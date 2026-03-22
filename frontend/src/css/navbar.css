@@ -36,7 +36,7 @@
 .navbar-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #ef4444; 
+    color: #ef4444;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -65,7 +65,6 @@
 .navbar-button:hover {
     color: #ffffff;
     background-color: rgba(255, 255, 255, 0.05);
-    color: #ef4444;
 }
 
 .navbar-button.logout {

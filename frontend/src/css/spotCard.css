@@ -1,0 +1,83 @@
+.spot-card {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid #2d2d2d;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.spot-card:hover {
+    transform: translateY(-4px);
+    border-color: #3f3f3f;
+}
+
+.spot-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+}
+
+.spot-detail {
+    font-size: 0.95rem;
+    color: #9ca3af;
+    margin: 0.35rem 0;
+}
+
+.spot-detail strong {
+    color: #d1d5db;
+    font-weight: 600;
+}
+
+.spot-actions {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.spot-btn {
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    font-size: 0.95rem;
+}
+
+.spot-btn-primary {
+    background-color: #dc2626;
+    color: #ffffff;
+}
+
+.spot-btn-primary:hover {
+    background-color: #ef4444;
+}
+
+.spot-btn-secondary {
+    background-color: #2a2a2a;
+    color: #e5e7eb;
+    border-color: #3f3f3f;
+}
+
+.spot-btn-secondary:hover {
+    background-color: #3f3f3f;
+    color: #ffffff;
+}
+
+.spot-btn-favorite {
+    background-color: transparent;
+    color: #ef4444;
+    border-color: #ef4444;
+}
+
+.spot-btn-favorite:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+}

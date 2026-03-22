@@ -3,6 +3,7 @@ import api from "../api/api";
 import { useState, useEffect } from 'react';
 import SpotCard, { Spot } from "../components/SpotCard";
 import SearchSpot from "../components/SearchSpot";
+import '../css/home.css';
 
 function Home() {
     const { address, error: geoError, loading: geoLoading } = useGeolocation();
@@ -32,20 +33,32 @@ function Home() {
     }, [address, geoLoading, geoError]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="home-loading-container">
+                <div className="home-spinner"></div>
+                <p>Loading spots...</p>
+            </div>
+        );
     }
 
     if (geoError) {
-        return <div>Error: {geoError}</div>;
+        return (
+            <div className="home-loading-container">
+                <p className="auth-error-msg">Error: {geoError}</p>
+            </div>
+        );
     }
 
     return (
-        <div>
+        <div className="home-container">
+            <h1 className="home-header">Discover Spots</h1>
             <SearchSpot onSpotsFetch={setSpots}/>
-            <h1>Home</h1>
-            {spots.map((spot) => (
-                <SpotCard key={spot.googlePlaceId} spot={spot} />
-            ))} 
+            
+            <div className="spot-grid">
+                {spots.map((spot) => (
+                    <SpotCard key={spot.googlePlaceId} spot={spot} />
+                ))} 
+            </div>
         </div>
     );
 }

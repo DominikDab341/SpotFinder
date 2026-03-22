@@ -53,10 +53,10 @@ function SearchSpot({ onSpotsFetch }: SearchSpotProps) {
     };
 
     return (
-        <div>
-            <h2>Search</h2>
+        <div className="search-panel">
+            <h2 className="search-header">Find the best spots</h2>
 
-            <div>
+            <div className="search-field">
                 <label>Address / Place:</label>
                 <input
                     type="text"
@@ -66,7 +66,7 @@ function SearchSpot({ onSpotsFetch }: SearchSpotProps) {
                 />
             </div>
 
-            <div>
+            <div className="search-field">
                 <label>Type:</label>
                 <select value={type} onChange={(e) => setType(e.target.value)}>
                     <option value="all">All</option>
@@ -78,7 +78,7 @@ function SearchSpot({ onSpotsFetch }: SearchSpotProps) {
                 </select>
             </div>
 
-            <div>
+            <div className="search-field">
                 <label>Distance (meters):</label>
                 <input
                     type="number"
@@ -90,7 +90,7 @@ function SearchSpot({ onSpotsFetch }: SearchSpotProps) {
                 />
             </div>
 
-            <button onClick={handleSearch} disabled={loading || !address}>
+            <button className="search-btn" onClick={handleSearch} disabled={loading || !address}>
                 {loading ? 'Searching...' : 'Search'}
             </button>
         </div>
