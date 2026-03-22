@@ -21,6 +21,7 @@ function Login() {
                 password,
             });
             localStorage.setItem('accessToken', response.data.access);
+            localStorage.setItem('refreshToken', response.data.refresh);
 
             navigate('/');
         } catch (err) {
