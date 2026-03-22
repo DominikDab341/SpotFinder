@@ -19,6 +19,10 @@ function Navbar() {
     navigate('/reservations');
   };
 
+  const handleMoveToHome = () => {
+    navigate('/');
+  };
+
   return (
     <>
       <nav className="navbar">
@@ -26,7 +30,7 @@ function Navbar() {
         </div>
 
         <div className="navbar-center">
-          <span className="navbar-title">SpotFinder</span>
+          <button className="navbar-title" onClick={handleMoveToHome}>SpotFinder</button>
         </div>
 
         <div className="navbar-right">
