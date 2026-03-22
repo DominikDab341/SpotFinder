@@ -131,3 +131,83 @@ class FavoriteSpotAPITest(APITestCase):
         self.assertEqual(FavoriteSpot.objects.count(), 0)
         # Spot itself should still exist in db, just the favorite relation is removed
         self.assertEqual(Spot.objects.count(), 1)
+
+
+class SpotCategoryMappingTest(TestCase):
+
+    def test_restaurant_maps_to_food_and_drink(self):
+        from spots.utils import get_spot_category
+        result = get_spot_category('restaurant')
+        self.assertEqual(result, 'food_and_drink')
+
+    def test_park_maps_to_parks_and_nature(self):
+        from spots.utils import get_spot_category
+        result = get_spot_category('park')
+        self.assertEqual(result, 'parks_and_nature')
+
+    def test_unknown_type_returns_none(self):
+        from spots.utils import get_spot_category
+        result = get_spot_category('totally_unknown_type')
+        self.assertIsNone(result)
+
+    def test_fallback_to_types_array(self):
+        from spots.utils import get_spot_category
+        result = get_spot_category('', ['cafe', 'food_court'])
+        self.assertEqual(result, 'food_and_drink')
+
+
+@override_settings(
+    EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend',
+    TASKS={
+        "default": {
+            "BACKEND": "django_tasks.backends.immediate.ImmediateBackend"
+        }
+    }
+)
+class ReservationValidationTest(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='reservationuser',
+            email='reservation@example.com',
+            password='password123'
+        )
+        self.client.force_authenticate(user=self.user)
+        self.url = reverse('reservations-list')
+
+    def test_create_reservation_food_and_drink_success(self):
+        payload = {
+            "reservationTime": "2026-04-01T18:00:00Z",
+            "guests": 4,
+            "googlePlaceId": "ChIJfoodtest",
+            "displayName": "Test Restaurant",
+            "formattedAddress": "123 Food St",
+            "spotCategory": "food_and_drink"
+        }
+        response = self.client.post(self.url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Reservation.objects.count(), 1)
+
+    def test_create_reservation_non_food_rejected(self):
+        payload = {
+            "reservationTime": "2026-04-01T18:00:00Z",
+            "guests": 2,
+            "googlePlaceId": "ChIJparktest",
+            "displayName": "Test Park",
+            "formattedAddress": "456 Park Ave",
+            "spotCategory": "parks_and_nature"
+        }
+        response = self.client.post(self.url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Reservation.objects.count(), 0)
+
+    def test_create_reservation_missing_category_rejected(self):
+        payload = {
+            "reservationTime": "2026-04-01T18:00:00Z",
+            "guests": 2,
+            "googlePlaceId": "ChIJnocattest",
+            "displayName": "Test Place",
+            "formattedAddress": "789 Unknown St"
+        }
+        response = self.client.post(self.url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Reservation.objects.count(), 0)

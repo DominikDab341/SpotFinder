@@ -12,6 +12,7 @@ export interface Spot {
     rating?: number;
     userRatingCount?: number;
     priceLevel?: string;
+    spotCategory?: string;
     isFavorite?: boolean;
     favoriteId?: number | null;
 }
@@ -68,7 +69,7 @@ function SpotCard({ spot, onRemove }: SpotCardProps) {
             <p className="spot-detail"><strong>Rating:</strong> {spot.rating}</p>
             <p className="spot-detail"><strong>Reviews:</strong> {spot.userRatingCount}</p>
             <p className="spot-detail"><strong>Price:</strong> {spot.priceLevel ?? "No data available"}</p>
-            
+
             <div className="spot-actions">
                 {isFavorite ? (
                     <button className="spot-btn spot-btn-favorite" onClick={handleRemoveFromFavorites}>
@@ -79,10 +80,11 @@ function SpotCard({ spot, onRemove }: SpotCardProps) {
                         Add to favorites ❤️
                     </button>
                 )}
-                <button className="spot-btn spot-btn-primary" onClick={() => setIsReservationModalOpen(true)}>
-                    Reserve
-                </button>
-                
+                {spot.spotCategory === 'food_and_drink' && (
+                    <button className="spot-btn spot-btn-primary" onClick={() => setIsReservationModalOpen(true)}>
+                        Reserve
+                    </button>
+                )}
                 <button className="spot-btn spot-btn-secondary" onClick={() => setIsAIChatModalOpen(true)}>
                     Ask AI
                 </button>

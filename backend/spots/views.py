@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTStatelessUserAuthentication
 from django.conf import settings
 from .serializers import SpotSearchSerializer, ReservationSerializer, FavoriteSpotSerializer
+from .utils import get_spot_category
 from .place_types import SPOT_CATEGORIES
 from rest_framework import viewsets, generics
 from .models import Reservation, FavoriteSpot
@@ -54,7 +55,7 @@ class SpotsView(APIView):
                 headers = {
                     "Content-Type": "application/json",
                     "X-Goog-Api-Key": api_key,
-                    "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.location,places.id,places.rating,places.userRatingCount,places.priceLevel"
+                    "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.location,places.id,places.rating,places.userRatingCount,places.priceLevel,places.primaryType,places.types"
                 }
 
                 payload = {
@@ -95,6 +96,10 @@ class SpotsView(APIView):
                         fav_id = favorite_dict.get(google_id) if is_fav else None
                         
                         display_name_text = place.get('displayName', {}).get('text')
+
+                        primary_type = place.get('primaryType', '')
+                        place_types = place.get('types', [])
+                        spot_category = get_spot_category(primary_type, place_types)
                         
                         new_place = {
                             'googlePlaceId': google_id,
@@ -103,6 +108,7 @@ class SpotsView(APIView):
                             'rating': place.get('rating'),
                             'userRatingCount': place.get('userRatingCount'),
                             'priceLevel': place.get('priceLevel'),
+                            'spotCategory': spot_category,
                             'isFavorite': is_fav,
                             'favoriteId': fav_id
                         }

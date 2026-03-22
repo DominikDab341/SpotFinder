@@ -52,14 +52,22 @@ class SpotGetOrCreate(serializers.Serializer):
 class ReservationSerializer(SpotGetOrCreate,serializers.ModelSerializer):
     spotDetails = SpotDisplayMetaSerializer(source='spot', read_only=True)
     reservationTime = serializers.DateTimeField(source='reservation_time')
+    spotCategory = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = Reservation
         fields = ['id', 'reservationTime', 'guests', 'status', 
-            'googlePlaceId', 'displayName', 'formattedAddress', 'spotDetails'
+            'googlePlaceId', 'displayName', 'formattedAddress', 'spotDetails', 'spotCategory'
         ]
         read_only_fields = ['id', 'status', 'user']
+
+    def validate_spotCategory(self, value):
+        if value != 'food_and_drink':
+            raise serializers.ValidationError('Reservations are only available for Food & Drink spots.')
+        return value
+
     def create(self,validated_data):
+        validated_data.pop('spotCategory', None)
         with transaction.atomic():
             spot = self.get_or_create_spot(validated_data)
 
