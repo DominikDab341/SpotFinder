@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from './Modal';
 import api from '../../api/api';
+import '../../css/reservationModal.css';
 
 import { Spot } from '../SpotCard';
 
@@ -43,12 +44,27 @@ function ReservationModal({ isOpen, onClose, place }: Props) {
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
-            <h1>Reservation - {place.displayName}</h1>
-            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-            <input type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
-            <input type="number" min="1" value={guests} onChange={(e) => setGuests(Number(e.target.value))} />
-            <button onClick={onClose}>Cancel</button>
-            <button onClick={handleReservation}>Reserve</button>
+            <h1 className="modal-title">Reservation - {place.displayName}</h1>
+            
+            <div className="reservation-form-group">
+                <label>Date:</label>
+                <input className="reservation-input" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+            </div>
+            
+            <div className="reservation-form-group">
+                <label>Time:</label>
+                <input className="reservation-input" type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
+            </div>
+            
+            <div className="reservation-form-group">
+                <label>Guests:</label>
+                <input className="reservation-input" type="number" min="1" value={guests} onChange={(e) => setGuests(Number(e.target.value))} />
+            </div>
+            
+            <div className="reservation-actions">
+                <button className="reservation-btn reservation-btn-cancel" onClick={onClose}>Cancel</button>
+                <button className="reservation-btn reservation-btn-primary" onClick={handleReservation}>Reserve</button>
+            </div>
         </Modal>
     );
 }

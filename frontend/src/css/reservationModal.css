@@ -1,0 +1,68 @@
+.reservation-form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.25rem;
+}
+
+.reservation-form-group label {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #d1d5db;
+    font-weight: 500;
+}
+
+.reservation-input {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #3f3f3f;
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.reservation-input:focus {
+    border-color: #ef4444;
+}
+
+.reservation-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.reservation-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s, transform 0.1s;
+}
+
+.reservation-btn:active {
+    transform: scale(0.98);
+}
+
+.reservation-btn-cancel {
+    background-color: transparent;
+    color: #9ca3af;
+    border: 1px solid #3f3f3f;
+}
+
+.reservation-btn-cancel:hover {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+
+.reservation-btn-primary {
+    background-color: #dc2626;
+    color: #ffffff;
+}
+
+.reservation-btn-primary:hover {
+    background-color: #ef4444;
+}
