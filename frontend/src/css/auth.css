@@ -1,0 +1,120 @@
+
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #121212; /* Ciemne tło */
+    color: #e5e7eb; /* Jasny tekst */
+    padding: 2rem;
+}
+
+.auth-card {
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem;
+    background-color: #1e1e1e; /* Ciemniejszy panel formularza */
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #2d2d2d;
+}
+
+.auth-title {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.75rem;
+    color: #ffffff;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.auth-input-group label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #d1d5db;
+}
+
+.auth-input-group input {
+    padding: 0.75rem;
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #3f3f3f;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.auth-input-group input:focus {
+    outline: none;
+    border-color: #ef4444; /* Czerwone obramowanie po kliknięciu w input */
+}
+
+.auth-submit-btn {
+    padding: 0.75rem;
+    background-color: #dc2626; /* Mocny czerwony przycisk */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-top: 0.5rem;
+}
+
+.auth-submit-btn:hover {
+    background-color: #ef4444; /* Jaśniejszy czerwony po najechaniu */
+}
+
+.auth-submit-btn:active {
+    transform: scale(0.98);
+}
+
+.auth-submit-btn:disabled {
+    background-color: #7f1d1d; /* Przygaszony czerwony dla stanu wyłączonego */
+    color: #fca5a5;
+    cursor: not-allowed;
+}
+
+.auth-error-msg {
+    color: #f87171;
+    background-color: rgba(239, 68, 68, 0.1);
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-left: 4px solid #ef4444;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.auth-link-text {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #9ca3af;
+}
+
+.auth-link-text a {
+    color: #ef4444;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.auth-link-text a:hover {
+    color: #f87171;
+    text-decoration: underline;
+}
