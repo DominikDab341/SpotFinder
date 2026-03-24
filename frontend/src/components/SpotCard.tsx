@@ -23,7 +23,8 @@ export interface SpotCardProps {
 }
 
 function SpotCard({ spot, onRemove }: SpotCardProps) {
-    const [isFavorite, setIsFavorite] = useState<boolean>(spot.isFavorite ?? true);
+    const [isFavorite, setIsFavorite] = useState<boolean>(spot.isFavorite ?? false);
+    const [favoriteId, setFavoriteId] = useState<number>(spot.favoriteId ?? 0);
     const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
     const [isAIChatModalOpen, setIsAIChatModalOpen] = useState(false);
 
@@ -31,10 +32,9 @@ function SpotCard({ spot, onRemove }: SpotCardProps) {
         if (!isFavorite) return;
 
         try {
-            await api.delete(`favorites/${spot.favoriteId}/`);
+            await api.delete(`favorites/${favoriteId}/`);
             setIsFavorite(false);
-            spot.isFavorite = false;
-            spot.favoriteId = null;
+            setFavoriteId(0);
             if (onRemove) {
                 onRemove(spot.googlePlaceId);
             }
@@ -55,8 +55,7 @@ function SpotCard({ spot, onRemove }: SpotCardProps) {
                 priceLevel: spot.priceLevel ?? null,
             });
             setIsFavorite(true);
-            spot.isFavorite = true;
-            spot.favoriteId = response.data.id;
+            setFavoriteId(response.data.id);
         } catch (error) {
             console.error('Error adding to favorites:', error);
         }

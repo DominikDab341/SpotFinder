@@ -1,3 +1,4 @@
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -7,7 +8,7 @@ import MyReservations from './pages/MyReservations';
 import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 
-function App() {
+const App: React.FC = () => {
 
   return (
     <>
@@ -29,4 +30,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

@@ -9,10 +9,18 @@ function useGeolocation(){
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
-                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`);                    
-                    const data = await response.json();
-                    setAddress(data.display_name);
-                    setLoading(false);
+                    try {
+                        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`);                    
+                        if (!response.ok) {
+                            throw new Error("Error while fetching address (Nominatim API).");
+                        }
+                        const data = await response.json();
+                        setAddress(data.display_name);
+                        setLoading(false);
+                    } catch (error: any) {
+                        setError(error.message || "An unknown error occurred.");
+                        setLoading(false);
+                    }
                 },
                 (error) => {
                     setError(error.message);
