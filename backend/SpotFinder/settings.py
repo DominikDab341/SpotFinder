@@ -28,7 +28,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
 
 
 # Application definition
@@ -145,9 +145,9 @@ REST_FRAMEWORK = {
 
 RQ_QUEUES = {
     'default': {
-        'HOST': 'localhost',
-        'PORT': 6379,
-        'DB': 0,
+        'HOST': os.getenv('REDIS_HOST','localhost'),
+        'PORT': os.getenv('REDIS_PORT',6379),
+        'DB': os.getenv('REDIS_DB',0),
     }
 }
 
