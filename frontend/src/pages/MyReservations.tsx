@@ -3,6 +3,7 @@ import api from "../api/api";
 import { Spot } from "../components/SpotCard";
 import '../css/home.css';
 import '../css/spotCard.css';
+import Pagination from "../components/Pagination";
 
 interface Reservation {
     id: number;
@@ -14,19 +15,25 @@ interface Reservation {
 
 function MyReservations() {
     const [reservations, setReservations] = useState<Reservation[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(1);
 
     useEffect(() => {
         const fetchReservations = async () => {
             try {
-                const response = await api.get('/reservations/');
-                setReservations(response.data);
+                const response = await api.get(`/reservations/?page=${currentPage}`);
+                
+                setReservations(response.data.results ?? []);
+                
+                const totalItems = response.data.count || 0;
+                setTotalPages(Math.ceil(totalItems / 9));
             } catch (error) {
                 console.error('Error fetching reservations:', error);
             }
         };
 
         fetchReservations();
-    }, []);
+    }, [currentPage]);
 
     const handleCancelReservation = async (id: number) => {
         try {
@@ -39,7 +46,8 @@ function MyReservations() {
 
     return (
         <div className="home-container">
-            <h1 className="home-header">My Reservations</h1>
+            {reservations.length > 0 ? 
+            <h1 className="home-header">My Reservations</h1> : <h1 className="home-header">No Reservations</h1>}
             
             <div className="spot-grid">
                 {reservations.map(reservation => (
@@ -70,6 +78,14 @@ function MyReservations() {
                     </div>
                 ))}
             </div>
+            
+            {totalPages > 1 && (
+                <Pagination 
+                   currentPage={currentPage}
+                   totalPages={totalPages}
+                   onPageChange={(page) => setCurrentPage(page)}
+                />
+            )}
         </div>
     );
 }

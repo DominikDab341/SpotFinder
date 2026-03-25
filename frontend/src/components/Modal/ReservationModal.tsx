@@ -24,7 +24,11 @@ function ReservationModal({ isOpen, onClose, place }: Props) {
 
         try {
             const combinedDateTime = new Date(`${date}T${time}`).toISOString();
-
+            
+            if (combinedDateTime < new Date().toISOString()) {
+                alert("Reservation time must be in the future.");
+                return;
+            }
             await api.post('/reservations/', {
                 reservationTime: combinedDateTime,
                 guests: guests,

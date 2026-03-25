@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Reservation, Spot, FavoriteSpot
 from django.db import transaction
+from django.utils import timezone
 
 class SpotSearchSerializer(serializers.Serializer):
     address = serializers.CharField(required=True)
@@ -64,6 +65,11 @@ class ReservationSerializer(SpotGetOrCreate,serializers.ModelSerializer):
     def validate_spotCategory(self, value):
         if value != 'food_and_drink':
             raise serializers.ValidationError('Reservations are only available for Food & Drink spots.')
+        return value
+
+    def validate_reservationTime(self,value):
+        if value < timezone.now():
+            raise serializers.ValidationError('Reservation time must be in the future.')
         return value
 
     def create(self,validated_data):

@@ -3,6 +3,7 @@ from adrf.views import APIView
 from asgiref.sync import sync_to_async
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTStatelessUserAuthentication
+from rest_framework.pagination import PageNumberPagination
 from django.conf import settings
 from .serializers import SpotSearchSerializer, ReservationSerializer, FavoriteSpotSerializer
 from .utils import get_spot_category
@@ -11,6 +12,9 @@ from rest_framework import viewsets, generics
 from .models import Reservation, FavoriteSpot
 import requests
 import httpx
+
+class SpotsPagination(PageNumberPagination):
+    page_size = 9
 
 class SpotsView(APIView):
     """
@@ -135,6 +139,7 @@ class SpotTypesView(APIView):
 
 class ReservationViewSet(viewsets.ModelViewSet):
     serializer_class = ReservationSerializer
+    pagination_class = SpotsPagination
 
     def get_queryset(self):
         return Reservation.objects.filter(user=self.request.user).order_by('-reservation_time')
@@ -144,9 +149,10 @@ class ReservationViewSet(viewsets.ModelViewSet):
 
 class FavoriteSpotViewSet(viewsets.ModelViewSet):
     serializer_class = FavoriteSpotSerializer
+    pagination_class = SpotsPagination
 
     def get_queryset(self):
-        return FavoriteSpot.objects.filter(user=self.request.user)
+        return FavoriteSpot.objects.filter(user=self.request.user).order_by('-added_at')
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
